@@ -1,0 +1,8 @@
+services:
+  devenv:
+    user: 1000:1000
+    build:
+      dockerfile: Dockerfile.dev
+      context: .
+    volumes:
+      - '.:/repo'
