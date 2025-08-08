@@ -1,0 +1,30 @@
+diff --git a/plugins/askrene/askrene.c b/plugins/askrene/askrene.c
+index ad6bd088a..0605e7bb9 100644
+--- a/plugins/askrene/askrene.c
++++ b/plugins/askrene/askrene.c
+@@ -627,8 +627,11 @@ static struct command_result *do_getroutes(struct command *cmd,
+ 	rq_log(tmpctx, rq, LOG_DBG, "get_routes %s %" PRIu64 " ms",
+ 	       err ? "failed after" : "completed in",
+ 	       time_to_msec(time_delta));
+-	if (err)
++	if (err){
++		rq_log(tmpctx, rq, LOG_DBG, "getroutes failed reason: %s",
++		       err);
+ 		goto fail;
++        }
+ 
+ 	/* otherwise we continue */
+ 	assert(tal_count(flows) > 0);
+diff --git a/tests/fixtures.py b/tests/fixtures.py
+index 6cc91c12f..249c32c57 100644
+--- a/tests/fixtures.py
++++ b/tests/fixtures.py
+@@ -22,7 +22,7 @@ class LightningNode(utils.LightningNode):
+         utils.LightningNode.__init__(self, *args, **kwargs)
+ 
+         # This is a recent innovation, and we don't want to nail pyln-testing to this version.
+-        self.daemon.opts['dev-crash-after'] = 3600
++        # self.daemon.opts['dev-crash-after'] = 3600
+ 
+         # We have some valgrind suppressions in the `tests/`
+         # directory, so we can add these to the valgrind configuration
